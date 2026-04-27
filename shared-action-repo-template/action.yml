@@ -1,0 +1,54 @@
+name: Secure HTTP Header Check
+description: Validate security-related HTTP response headers for one or more URLs.
+author: Accenture-Stage
+
+branding:
+  icon: shield
+  color: blue
+  
+inputs:
+  urls:
+    description: 'Comma-separated or newline-separated URLs to validate'
+    required: true
+  timeout-seconds:
+    description: 'Request timeout per URL in seconds'
+    required: false
+    default: '15'
+  custom-required-headers:
+    description: 'JSON object of additional required headers (example: {"x-api-version": "v1"})'
+    required: false
+    default: '{}'
+  compliance-profile:
+    description: 'Compliance profile to apply: default | jobaid | accenture-jobaid'
+    required: false
+    default: 'default'
+  sarif-path:
+    description: 'Optional SARIF output path. Defaults to $RUNNER_TEMP/secure-http-header-check.sarif'
+    required: false
+    default: ''
+
+outputs:
+  passed:
+    description: 'true when all checks pass, otherwise false'
+    value: ${{ steps.validate.outputs.passed }}
+  violations:
+    description: 'JSON array of violations'
+    value: ${{ steps.validate.outputs.violations }}
+  sarif-file:
+    description: 'Absolute path to generated SARIF file'
+    value: ${{ steps.validate.outputs.sarif-file }}
+
+runs:
+  using: composite
+  steps:
+    - name: Validate security headers
+      id: validate
+      shell: bash
+      env:
+        INPUT_URLS: ${{ inputs.urls }}
+        INPUT_TIMEOUT_SECONDS: ${{ inputs.timeout-seconds }}
+        INPUT_CUSTOM_REQUIRED_HEADERS: ${{ inputs.custom-required-headers }}
+        INPUT_COMPLIANCE_PROFILE: ${{ inputs.compliance-profile }}
+        INPUT_SARIF_PATH: ${{ inputs.sarif-path }}
+      run: |
+        node "$GITHUB_ACTION_PATH/validate-headers.js"
