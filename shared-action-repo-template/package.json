@@ -1,0 +1,16 @@
+
+{
+  "name": "secure-http-header-check-action",
+  "version": "1.0.0",
+  "description": "Shared GitHub Action template for validating secure HTTP response headers",
+  "private": true,
+  "main": "validate-headers.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "lint": "node --check validate-headers.js"
+  },
+  "license": "MIT"
+}
