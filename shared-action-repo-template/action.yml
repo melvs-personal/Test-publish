@@ -1,6 +1,6 @@
 name: Secure HTTP Header Check
 description: Validate security-related HTTP response headers for one or more URLs.
-author: Accenture-Stage
+author: melvs-personal
 
 branding:
   icon: shield
